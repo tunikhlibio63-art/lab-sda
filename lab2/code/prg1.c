@@ -18,12 +18,13 @@ int main () {
     s = 0.0;
     for(int j = 1; j <= i; ++j) {
       s += 2 * j - 1;
-      ops += 4;
+      ops += 6;
     }
     P *= (1.0 - ((x * x) / (M_PI * M_PI * s)));
-    ops += 7;
+    ops += 10;
   }
-  
+  ops += 1;
+
   printf("P = %.7f\n", P);
   printf("operations = %d\n", ops);
   
