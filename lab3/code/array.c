@@ -12,9 +12,9 @@ typedef struct {
 } queue_t;
 
 int enqueue(queue_t *queue, char val) {
-  if(queue->head - queue->tail < CAPACITY) {
-    queue->array[queue->head] = val;
-    ++queue->head <= CAPACITY ? queue->head : queue->head - CAPACITY;
+  if((queue->tail + 1) % CAPACITY == queue->head) {
+    queue->array[queue->tail] = val;
+    queue->tail = queue->tail % CAPACITY;
   } else {
     return -1;
   }
@@ -22,12 +22,16 @@ int enqueue(queue_t *queue, char val) {
 }
 
 
+
 int main () {
   queue_t qu = {.tail = 0, .head = 0};
 
-  if(enqueue(&qu, 'a') == 0) {
-    return 0;
-  } else {
-    return -1;
+  for(int i = 0; i < 10; ++i) {
+    if(enqueue(&qu, 'a') == 0) {
+      continue;
+    } else {
+      return -1;
+    }
   }
+  return 0;
 }
