@@ -2,6 +2,8 @@
 #include"queue.h"
 
 
+//check fix
+
 
 int main () {
   queue_t *qu;
@@ -10,7 +12,7 @@ int main () {
   create_queue(&qu);
   printf(" br   | i |val|\n");
   for(int i = 0; i < 10; ++i) {
-    if(enqueue(qu, (char)(i + 48) ) == 0) {
+    if(enqueue(qu, (char)(i + 48)) == 0) {
       peek_front(qu, &dest);
       printf(" main | %d | %c\n", i, dest);
       continue;
