@@ -33,7 +33,7 @@ bool is_empty(queue_t *q) {
 }
 
 bool is_full(queue_t *q) {
-  return (q->tail + 1) % CAPACITY != q->head;
+  return (q->tail + 1) % CAPACITY == q->head;
 }
 
 int enqueue(queue_t *q, char val) {
