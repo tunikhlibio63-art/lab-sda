@@ -2,8 +2,6 @@
 #include"queue.h"
 
 
-//check fix
-
 
 int main () {
   queue_t *qu;
