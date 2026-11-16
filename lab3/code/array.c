@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdint.h>
-
+#include<stdbool.h>
 
 
 constexpr size_t CAPACITY = 8;
@@ -11,8 +11,16 @@ typedef struct {
   char array [CAPACITY];
 } queue_t;
 
+bool is_empty(queue_t *queue) {
+  return queue->tail != queue->head;
+}
+
+bool is_full(queue_t *queue) {
+  return (queue->tail + 1) % CAPACITY != queue->head;
+}
+
 int enqueue(queue_t *queue, char val) {
-  if((queue->tail + 1) % CAPACITY != queue->head) {
+  if(is_full(queue)) {
     queue->array[queue->tail] = val;
     queue->tail = (queue->tail + 1) % CAPACITY;
   } else {
@@ -22,7 +30,7 @@ int enqueue(queue_t *queue, char val) {
 }
 
 char dequeue(queue_t *queue) {
-  if(queue->tail != queue->head) {
+  if(is_empty(queue)) {
     char res = queue->array[queue->head];
     queue->head = (queue->head + 1) % CAPACITY;
     return res;
