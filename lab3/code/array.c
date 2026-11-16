@@ -39,14 +39,23 @@ char dequeue(queue_t *queue) {
   }
 }
 
+int peek_front(queue_t *queue) {
+  if(is_empty(queue)) {
+    return 0; 
+  }
+  return queue->array[queue->head];
+}
+
 int main () {
   queue_t qu = {.tail = 0, .head = 0};
 
+  printf(" br   | i |val|\n");
   for(int i = 0; i < 10; ++i) {
     if(enqueue(&qu, (char)(i + 48) ) == 0) {
+      printf(" main | %d | %c\n", i, peek_front(&qu));
       continue;
     } else {
-      printf("%c\n", dequeue(&qu));
+      printf(" else | %d | %c\n", i, dequeue(&qu));
     }
   }
   return 0;
