@@ -5,13 +5,15 @@
 
 
 
-queue_status_t create_queue(queue_t **q) {
+queue_status_t create_queue(queue_t **q, size_t size) {
   *q = malloc(sizeof(queue_t));
   if(*q == nullptr) {
     return QUEUE_ERR_MALLOC;
   }
   (*q)->tail = nullptr;
   (*q)->head = nullptr;
+  (*q)->size = size;
+  (*q)->capacity = 0;
   return QUEUE_SUCCESS;
 }
 
@@ -32,10 +34,13 @@ bool is_empty(queue_t *q) {
 }
 
 bool is_full(queue_t *q) {
-  return false;
+  return q->capacity >= q->size;
 }
 
 queue_status_t enqueue(queue_t *q, char val) {
+  if(is_full(q)) {
+    return QUEUE_ERR_FULL;
+  }
   queue_status_t status;
   node_t *node = create_node(&status);
   if(status != QUEUE_SUCCESS) {
@@ -45,14 +50,21 @@ queue_status_t enqueue(queue_t *q, char val) {
   node->next = nullptr;
   if(is_empty(q)) {
     q->head = node;
+    q->tail = node;
   }
-  q->tail = node;
+  q->tail->next = node;
+  q->tail = q->tail->next;
+  ++q->capacity;
   return status;
 }
 
 queue_status_t dequeue(queue_t *q, char *dest) {
+  if(is_empty(q)) {
+    return QUEUE_ERR_EMPTY;
+  }
   *dest = q->head->value;
   delete_node(q);
+  --q->capacity;
   return QUEUE_SUCCESS;
 }
 

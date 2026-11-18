@@ -10,6 +10,8 @@ typedef struct node_s {
 struct queue_s {
   node_t *head;
   node_t *tail;
+  size_t size;
+  size_t capacity;
 };
 
 static inline node_t *create_node(queue_status_t *status) {
