@@ -10,16 +10,8 @@ queue_status_t create_queue(queue_t **q) {
   if(*q == nullptr) {
     return QUEUE_ERR_MALLOC;
   }
-  node_t *node = malloc(sizeof(node_t));
-  if(node == nullptr) {
-    free(*q);
-    *q = nullptr;
-    return QUEUE_ERR_MALLOC;
-  }
-  node->value = 0;
-  node->next = node;
-  (*q)->tail = node;
-  (*q)->head = node;
+  (*q)->tail = nullptr;
+  (*q)->head = nullptr;
   return QUEUE_SUCCESS;
 }
 
@@ -27,25 +19,48 @@ void delete_queue(queue_t **q) {
   if(q == nullptr || *q == nullptr){
     return;
   }
-  node_t *start = (*q)->head;
-  node_t *current = (*q)->head;
-  node_t *next;
-  do {
-    next = current->next;
-    free(current);
-    current = next;
-  } while(current != start);
+  node_t *node = (*q)->head;
+  while((*q)->head != nullptr) {
+    delete_node(*q);
+  }
   free(*q);
   *q = nullptr;
 }
 
-bool is_empty(queue_t *q) {return 0;}
+bool is_empty(queue_t *q) {
+  return q->head == nullptr && q->tail == nullptr;
+}
 
-bool is_full(queue_t *q) {return 0;}
+bool is_full(queue_t *q) {
+  return false;
+}
 
-queue_status_t enqueue(queue_t *q, char val) {return 0;}
+queue_status_t enqueue(queue_t *q, char val) {
+  queue_status_t status;
+  node_t *node = create_node(&status);
+  if(status != QUEUE_SUCCESS) {
+    return status;
+  }
+  node->value = val;
+  node->next = nullptr;
+  if(is_empty(q)) {
+    q->head = node;
+  }
+  q->tail = node;
+  return status;
+}
 
-queue_status_t dequeue(queue_t *q, char *dest) {return 0;}
+queue_status_t dequeue(queue_t *q, char *dest) {
+  *dest = q->head->value;
+  delete_node(q);
+  return QUEUE_SUCCESS;
+}
 
-queue_status_t  peek_front(queue_t *q, char *dest) {return 0;}
+queue_status_t  peek_front(queue_t *q, char *dest) {
+  if(is_empty(q)) {
+    return QUEUE_ERR_EMPTY;
+  }
+  *dest = q->head->value;
+  return QUEUE_SUCCESS;
+}
 

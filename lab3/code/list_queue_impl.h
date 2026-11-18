@@ -11,3 +11,19 @@ struct queue_s {
   node_t *head;
   node_t *tail;
 };
+
+static inline node_t *create_node(queue_status_t *status) {
+  node_t *node = malloc(sizeof(node_t));
+  if(node == nullptr) {
+    *status = QUEUE_ERR_MALLOC; 
+  }
+  *status = QUEUE_SUCCESS;
+  return node;
+}
+
+static inline void delete_node(queue_t *q) { 
+  node_t *node = q->head->next;
+  free(q->head);
+  q->head = node;
+}
+
