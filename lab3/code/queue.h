@@ -12,7 +12,7 @@ typedef enum : int {
 
 typedef struct queue_s queue_t;
 
-queue_status_t create_queue(queue_t **q);
+queue_status_t create_queue(queue_t **q, size_t size);
 
 void delete_queue(queue_t **q);
 

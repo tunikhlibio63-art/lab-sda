@@ -3,22 +3,21 @@
 
 
 
-int main () {
-  queue_t *qu;
-  char dest;
+constexpr size_t CAPACITY = 128;
 
-  create_queue(&qu);
-  printf(" br   | i |val|\n");
-  for(int i = 0; i < 10; ++i) {
-    if(enqueue(qu, (char)(i + 48)) == 0) {
-      peek_front(qu, &dest);
-      printf(" main | %d | %c\n", i, dest);
-      continue;
-    } else {
-      dequeue(qu, &dest);
-      printf(" else | %d | %c\n", i, dest);
-    }
-  }
+int main () {
+  queue_t *qu = nullptr;
+  char dest = 0;
+
+  create_queue(&qu, CAPACITY);
+  enqueue(qu, dest++);
+  enqueue(qu, dest++);
+  enqueue(qu, dest++);
+  dequeue(qu, &dest);
+  printf("%d\n", dest);
+  dequeue(qu, &dest);
+  printf("%d\n", dest);
+  delete_queue(&qu);
   delete_queue(&qu);
   return 0;
 }
