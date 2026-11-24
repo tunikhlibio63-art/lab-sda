@@ -1,6 +1,6 @@
 #pragma once
 #include<stdbool.h>
-
+#include<stddef.h>
 
 typedef enum : int {
   QUEUE_SUCCESS = 0,
@@ -26,4 +26,5 @@ queue_status_t dequeue(queue_t *q, char *dest);
 
 queue_status_t  peek_front(queue_t *q, char *dest);
 
+double percentage(queue_t *q);
 
