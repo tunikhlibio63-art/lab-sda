@@ -1,7 +1,7 @@
+#include"ring_queue_impl.h"
+#include<stdint.h>
 #include<stdlib.h>
 #include<string.h>
-#include<stdint.h>
-#include"ring_queue_impl.h"
 
 
 

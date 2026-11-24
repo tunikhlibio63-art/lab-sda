@@ -1,5 +1,6 @@
+#pragma once
 #include"queue.h"
-#include"stdlib.h"
+#include<stdlib.h>
 
 
 typedef struct node_s {
