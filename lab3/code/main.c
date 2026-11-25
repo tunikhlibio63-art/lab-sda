@@ -3,7 +3,9 @@
 
 
 
-constexpr size_t CAPACITY = 20;
+constexpr size_t CAPACITY = 100;
+
+constexpr char ESC = 27;
 
 void err_handler(queue_status_t status){
   switch (status) {
@@ -26,36 +28,59 @@ void err_handler(queue_status_t status){
   }
 }
 
-int main () {
-  queue_status_t status;
+void output_queue(queue_t *q) {
+  char buf = 0;
+  unsigned long row_len = 20;
+  unsigned long counter = 0;
+  while(!is_empty(q)) {
+    if(counter >= row_len) {
+      printf("\n");
+      counter = 0;
+    }
+    err_handler(dequeue(q, &buf));
+    printf("%c ", buf);
+    ++counter;
+  }
+  printf("\n");
+}
+
+void input_queue(queue_t *q) {
   char buf;
   int intbuf;
   bool once = false;
-  queue_t *qu = nullptr;
-
-  create_queue(&qu, CAPACITY);
 
   while((intbuf = getchar()) != EOF) {
     buf = intbuf;
     if(buf == '\n') {
       continue;
+    } 
+    if(buf == ESC) {
+      return;
     }
-
-    if(80.0 < percentage(qu)) {
+    if(80.0 < percentage(q)) {
       if(once == false) {
-        printf("queue is 80%% full\n");
+        fprintf(stderr, "queue is 80%% full\n");
       }
       once = true;
     }
 
-    err_handler(enqueue(qu, buf));
+    err_handler(enqueue(q, buf));
   }
+}
 
-  while(!is_empty(qu)) {
-    err_handler(dequeue(qu, &buf));
-    printf("%c\n", buf);
-  }
+int main () {
+  queue_t *q = nullptr;
 
-  delete_queue(&qu);
+  err_handler(create_queue(&q, CAPACITY));
+  
+  char c;
+  err_handler(dequeue(q, &c));
+
+  input_queue(q);
+
+  output_queue(q);
+
+  delete_queue(&q);
+
   return 0;
 }
