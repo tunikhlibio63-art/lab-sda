@@ -1,5 +1,6 @@
 #include"queue.h"
 #include<stdio.h>
+#include<string.h>
 
 
 
@@ -55,30 +56,68 @@ void input_queue(queue_t *q) {
       continue;
     } 
     if(buf == ESC) {
+      getchar();
       return;
     }
-    if(80.0 < percentage(q)) {
+    if(80 <= (int)percentage(q)) {
       if(once == false) {
         fprintf(stderr, "queue is 80%% full\n");
       }
       once = true;
     }
-
     err_handler(enqueue(q, buf));
   }
 }
 
 int main () {
   queue_t *q = nullptr;
-
+  char in_buf[64];
+  int cc;
+  queue_status_t status;
   err_handler(create_queue(&q, CAPACITY));
-  
-  char c;
-  err_handler(dequeue(q, &c));
 
-  input_queue(q);
+  for(;;) {
+    printf("[cmd]> ");
+    fflush(stdout);
 
-  output_queue(q);
+    if(fgets(in_buf, sizeof(in_buf), stdin) == nullptr) {
+      break;
+    }
+
+    int too_long = 0;
+    char *nl = strchr(in_buf, '\n');
+
+    if(nl != nullptr) {
+      *nl = '\0';
+    } else {
+      int c;
+      while((c = getchar()) != '\n' && c != EOF) {
+        too_long = 1;
+      }
+    }
+    if(too_long) {
+      continue;
+    }
+
+    if(strcmp(in_buf, "exit") == 0) {
+      break;
+    } else if (strcmp(in_buf, "input") == 0) {
+      input_queue(q);
+    } else if (strcmp(in_buf, "output") == 0) {
+      output_queue(q);
+    } else if (strcmp(in_buf, "enqueue") == 0) {
+      if((cc = getchar()) == EOF) {
+        break;
+      }
+      err_handler(enqueue(q, (char)cc));
+      while(getchar() != '\n') {}
+    } else if(strcmp(in_buf, "dequeue") == 0) {
+        err_handler(status = dequeue(q, (char *)&cc));
+        if (status == QUEUE_SUCCESS) {
+          printf("%c\n", (char)cc);
+        }
+    }
+  }
 
   delete_queue(&q);
 
