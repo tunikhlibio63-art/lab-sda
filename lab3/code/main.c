@@ -65,6 +65,10 @@ void input_queue(queue_t *q) {
       }
       once = true;
     }
+    
+    if(80 > (int)percentage(q)) {
+      once = true;
+    }
     err_handler(enqueue(q, buf));
   }
 }
@@ -81,6 +85,7 @@ int main () {
     fflush(stdout);
 
     if(fgets(in_buf, sizeof(in_buf), stdin) == nullptr) {
+      printf("\n");
       break;
     }
 
@@ -101,21 +106,23 @@ int main () {
 
     if(strcmp(in_buf, "exit") == 0) {
       break;
-    } else if (strcmp(in_buf, "input") == 0) {
+    } else if(strcmp(in_buf, "input") == 0) {
       input_queue(q);
-    } else if (strcmp(in_buf, "output") == 0) {
+    } else if(strcmp(in_buf, "output") == 0) {
       output_queue(q);
-    } else if (strcmp(in_buf, "enqueue") == 0) {
+    } else if(strcmp(in_buf, "add") == 0) {
       if((cc = getchar()) == EOF) {
         break;
       }
       err_handler(enqueue(q, (char)cc));
       while(getchar() != '\n') {}
-    } else if(strcmp(in_buf, "dequeue") == 0) {
+    } else if(strcmp(in_buf, "del") == 0) {
         err_handler(status = dequeue(q, (char *)&cc));
         if (status == QUEUE_SUCCESS) {
           printf("%c\n", (char)cc);
-        }
+    }
+    } else if(strcmp(in_buf, "perc") == 0) {
+      printf("%2.0f%%\n", percentage(q));
     }
   }
 
